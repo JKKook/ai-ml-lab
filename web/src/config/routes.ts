@@ -16,6 +16,7 @@ export const ROUTES = {
       root: "/deep/lab",
       activationFunction: "/deep/lab/activation-function",
       backPropagation: "/deep/lab/back-propagation",
+      optimization: "/deep/lab/optimization",
     },
   },
   machine: {
@@ -59,6 +60,7 @@ export const DEEP_LAB_SUB_NAV = [
   { href: ROUTES.deep.lab.root, label: "실습 홈" },
   { href: ROUTES.deep.lab.activationFunction, label: "활성 함수" },
   { href: ROUTES.deep.lab.backPropagation, label: "역전파" },
+  { href: ROUTES.deep.lab.optimization, label: "최적화" },
 ];
 
 export const MACHINE_LAB_SUB_NAV = [

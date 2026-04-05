@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/lab/optimization",
+        destination: "/deep/lab/optimization",
+        permanent: true,
+      },
+      {
         source: "/activation",
         destination: "/deep/lab/activation-function",
         permanent: true,

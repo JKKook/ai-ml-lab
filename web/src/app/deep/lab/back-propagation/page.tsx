@@ -55,7 +55,8 @@ export default function BackpropPage() {
           <div>
             <h1 className="text-3xl font-bold">Backpropagation</h1>
             <p className="mt-1 text-sm text-zinc-500">
-              역전파 — 손실을 줄이도록 가중치가 갱신되는 과정을 에폭 단위로 재생
+              아주 작은 신경망이 “0은 0, 1은 1”처럼 맞추도록 숫자를 고쳐 가는 과정을, 에폭마다
+              되감아 볼 수 있습니다.
             </p>
           </div>
           <p className="font-mono text-sm text-zinc-400">
@@ -64,16 +65,45 @@ export default function BackpropPage() {
               · learns identity: 0 → 0, 1 → 1
             </span>
           </p>
-          <p className="max-w-3xl text-sm leading-relaxed text-zinc-500">
-            노트북과 같이{" "}
-            <strong className="font-medium text-zinc-400">입력 0은 0, 입력 1은 1</strong>
-            을 내도록 작은 네트워크를 학습시킵니다. 순전파로 예측을 만들고, 오차를
-            뒤로 전파해{" "}
-            <code className="rounded bg-zinc-800 px-1 text-zinc-400">w_hidden</code>·
-            <code className="rounded bg-zinc-800 px-1 text-zinc-400">w_output</code>
-            을 조금씩 고칩니다. 아래 슬라이더로 “어느 시점의 네트워크였는지”를
-            되감아 볼 수 있습니다.
+        </div>
+
+        <div className="mb-6 max-w-3xl rounded-xl border border-zinc-800 bg-zinc-900/50 p-5">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+            실습 목표
           </p>
+          <ul className="mt-3 list-disc space-y-3 pl-4 text-sm leading-relaxed text-zinc-400 marker:text-zinc-600">
+            <li>
+              <strong className="font-medium text-zinc-300">무엇을 맞추나요?</strong> 입력이{" "}
+              <code className="rounded bg-zinc-800 px-1 font-mono text-zinc-400">0</code>이면
+              출력도 0에 가깝게, 입력이{" "}
+              <code className="rounded bg-zinc-800 px-1 font-mono text-zinc-400">1</code>이면 출력도
+              1에 가깝게 나오도록 하는 것이 목표입니다. 그걸 위해 안쪽 연결 두 군데의 숫자,{" "}
+              <code className="rounded bg-zinc-800 px-1 text-zinc-400">w_hidden</code>과{" "}
+              <code className="rounded bg-zinc-800 px-1 text-zinc-400">w_output</code>을 조금씩
+              바꿉니다.
+            </li>
+            <li>
+              <strong className="font-medium text-zinc-300">한 에폭마다 무슨 일이 있나요?</strong>{" "}
+              먼저 지금 숫자들로 “답을 찍어” 봅니다(순전파). 정답과의 차이를 하나의 숫자로 모은
+              것이 <strong className="text-zinc-300">손실</strong>입니다. 그 차이가 어디서
+              비롯됐는지를 뒤에서 앞으로 전달해 보면서, 가중치를 살짝 고치는 것이{" "}
+              <strong className="text-zinc-300">역전파</strong>에 해당하는 흐름입니다. 이 데모는
+              그 과정을 에폭마다 기록해 두었다가 보여 줍니다.
+            </li>
+            <li>
+              <strong className="font-medium text-zinc-300">화면에서 무엇을 보나요?</strong> 위쪽
+              그림은 지금 가중치가 얼마인지·예측이 얼마나 맞는지, 손실 곡선은 시간이 지날수록
+              틀린 정도가 어떻게 줄어드는지, 산점도는 가중치가 움직이며 손실이 어떻게 변하는지
+              보여 줍니다. 재생·슬라이더로 “몇 번째 에폭의 상태인지”를 골라 볼 수 있습니다.
+            </li>
+            <li>
+              <strong className="font-medium text-zinc-300">학습률은요?</strong> 한 번에 숫자를
+              얼마나 크게 고칠지입니다. 너무 크면 튕기고, 너무 작으면 느려질 수 있어서 바꿔 보며
+              곡선 모양이 어떻게 달라지는지 비교해 보세요. 각 그래프 아래{" "}
+              <strong className="text-zinc-300">코드 보기</strong>에는 같은 내용을 NumPy로 풀어 쓴
+              노트북 코드가 들어 있습니다.
+            </li>
+          </ul>
         </div>
 
         <p className="mb-4 text-[11px] leading-relaxed text-zinc-600">
@@ -279,6 +309,22 @@ export default function BackpropPage() {
           </div>
         </div>
 
+        <p className="mt-10 text-xs text-zinc-600">
+          다른 실습:{" "}
+          <Link
+            href={ROUTES.deep.lab.activationFunction}
+            className="text-zinc-400 hover:text-zinc-200"
+          >
+            활성 함수
+          </Link>
+          {" · "}
+          <Link
+            href={ROUTES.deep.lab.optimization}
+            className="text-zinc-400 hover:text-zinc-200"
+          >
+            최적화
+          </Link>
+        </p>
       </div>
     </div>
   );

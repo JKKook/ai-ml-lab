@@ -32,4 +32,18 @@ export const LAB_DEMO_CARDS = [
         accent: '#10b981',
         // icon: "🔁",
     },
+    {
+        href: ROUTES.deep.lab.optimization,
+        title: 'Optimization',
+        titleKo: '최적화',
+        description:
+            'Compare SGD, Momentum, RMSprop, and Adam on the 2D Rosenbrock function. Scrub through steps, watch the (x,y) path toward the global minimum, and open matching PyTorch snippets to run the same experiment locally.',
+        descriptionKo:
+            'Rosenbrock 목적함수에서 SGD·모멘텀·RMSprop·Adam의 궤적과 손실 곡선을 비교합니다. 스텝을 되감으며 (x,y)가 (1,1) 근처로 어떻게 움직이는지 보고, 동일 설정의 PyTorch 코드를 복사해 로컬에서 돌려 볼 수 있습니다.',
+        badge: 'torch.optim',
+        badgeColor: 'bg-orange-900/40 text-orange-300 border-orange-800/60',
+        glow: 'from-orange-500/15 to-transparent',
+        border: 'border-orange-500/25 hover:border-orange-500/50',
+        accent: '#f97316',
+    },
 ] as const;

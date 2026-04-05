@@ -1440,12 +1440,19 @@ export default function DeepTheoryDetailPage() {
           </section>
 
           <p className="mt-8 text-xs text-zinc-600">
-            손실이 어떻게 그래프로 움직이는지는{" "}
+            손실·가중치 흐름은{" "}
             <Link
               href={ROUTES.deep.lab.backPropagation}
-              className="text-violet-400/90 hover:text-violet-300"
+              className="text-zinc-100 hover:text-white"
             >
               역전파 실습
+            </Link>
+            , 옵티마이저 비교는{" "}
+            <Link
+              href={ROUTES.deep.lab.optimization}
+              className="text-zinc-100 hover:text-white"
+            >
+              최적화 실습
             </Link>
             과 함께 보면 이해에 도움이 됩니다.
           </p>

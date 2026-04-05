@@ -62,7 +62,10 @@ export default function ActivationPage() {
           </Link>
           <div>
             <h1 className="text-3xl font-bold">Activation Functions</h1>
-            <p className="mt-1 text-sm text-zinc-500">활성화 함수 — 입력이 선형층을 지난 뒤 비선형으로 어떻게 바뀌는지</p>
+            <p className="mt-1 text-sm text-zinc-500">
+              같은 데이터에 “마지막에 어떤 함수를 씌우느냐”만 바꿔도, 숫자들이 어떻게 퍼져
+              보이는지 바로 비교합니다.
+            </p>
           </div>
           <p className="font-mono text-sm text-zinc-400">
             <span className="text-zinc-500">inputs</span>
@@ -71,19 +74,45 @@ export default function ActivationPage() {
             {"  →  "}
             <span style={{ color }}>f(z)</span>
           </p>
-          <p className="max-w-3xl text-sm leading-relaxed text-zinc-500">
-            노트북과 같이{" "}
-            <strong className="font-medium text-zinc-400">N개의 10차원 벡터</strong>를
-            만든 뒤, 하나의 선형층으로 스칼라{" "}
-            <code className="rounded bg-zinc-800 px-1 text-zinc-300">z</code>로
-            줄입니다. 그 다음 선택한 활성화{" "}
-            <code className="rounded bg-zinc-800 px-1 text-zinc-300">f</code>를
-            씌우면,{" "}
-            <strong className="font-medium text-zinc-400">
-              같은 z인데 분포 모양만 달라지는 이유
-            </strong>
-            를 히스토그램으로 바로 비교할 수 있습니다.
+        </div>
+
+        <div className="mb-6 max-w-3xl rounded-xl border border-zinc-800 bg-zinc-900/50 p-5">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+            실습 목표
           </p>
+          <ul className="mt-3 list-disc space-y-3 pl-4 text-sm leading-relaxed text-zinc-400 marker:text-zinc-600">
+            <li>
+              <strong className="font-medium text-zinc-300">무엇을 바꿔 보나요?</strong> 많은
+              샘플(여러 개의 10개짜리 숫자 묶음)을 만든 뒤, 선형층 하나로 각 샘플마다 숫자 하나{" "}
+              <code className="rounded bg-zinc-800 px-1 font-mono text-zinc-300">z</code>로
+              줄입니다. 여기까지는 항상 같습니다. 그다음{" "}
+              <strong className="text-zinc-300">활성화 함수</strong>{" "}
+              <code className="rounded bg-zinc-800 px-1 font-mono text-zinc-300">f</code>를
+              골라 <code className="rounded bg-zinc-800 px-1 font-mono text-zinc-300">f(z)</code>를
+              만듭니다. ReLU, 시그모이드, GELU, Tanh 등 버튼으로 바꿀 수 있습니다.
+            </li>
+            <li>
+              <strong className="font-medium text-zinc-300">무엇을 배우나요?</strong>{" "}
+              <code className="rounded bg-zinc-800 px-1 text-zinc-300">z</code>의 분포는 그대로인데,
+              <code className="rounded bg-zinc-800 px-1 text-zinc-300">f(z)</code>만 바꿔도{" "}
+              <strong className="text-zinc-300">막대 그래프(히스토그램) 모양이 달라지는 이유
+              </strong>
+              를 눈으로 확인합니다. 일부 함수는 큰 값을 잘라 내고(ReLU), 일부는 0~1 사이로
+              눌러 넣습니다(시그모이드). 그래서 “다음 층에 넘어가는 숫자들의 성격”이 달라집니다.
+            </li>
+            <li>
+              <strong className="font-medium text-zinc-300">화면에서 무엇을 보나요?</strong>{" "}
+              <code className="rounded bg-zinc-800 px-1 text-zinc-300">z</code>와{" "}
+              <code className="rounded bg-zinc-800 px-1 text-zinc-300">f(z)</code> 히스토그램,
+              함수 모양 곡선, 입력 공간을 3D로 본 산점도 등이 같은 데이터 흐름을 서로 다른 각도에서
+              보여 줍니다. 샘플 개수 N도 바꿔 볼 수 있습니다.
+            </li>
+            <li>
+              <strong className="font-medium text-zinc-300">코드는요?</strong> 각 그래프·표 아래{" "}
+              <strong className="text-zinc-300">코드 보기</strong>를 펼치면, 그림과 짝이 되는
+              PyTorch 스타일 노트북 코드를 복사해 연습할 수 있습니다.
+            </li>
+          </ul>
         </div>
 
         <p className="mb-4 text-[11px] leading-relaxed text-zinc-600">
@@ -346,6 +375,22 @@ export default function ActivationPage() {
           </div>
         </div>
 
+        <p className="mt-10 text-xs text-zinc-600">
+          다른 실습:{" "}
+          <Link
+            href={ROUTES.deep.lab.backPropagation}
+            className="text-zinc-400 hover:text-zinc-200"
+          >
+            역전파
+          </Link>
+          {" · "}
+          <Link
+            href={ROUTES.deep.lab.optimization}
+            className="text-zinc-400 hover:text-zinc-200"
+          >
+            최적화
+          </Link>
+        </p>
       </div>
     </div>
   );
