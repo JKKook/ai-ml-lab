@@ -10,6 +10,7 @@ export const ROUTES = {
       root: "/deep/theory",
       math: "/deep/theory/math",
       code: "/deep/theory/code",
+      detail: "/deep/theory/detail",
     },
     lab: {
       root: "/deep/lab",
@@ -22,6 +23,7 @@ export const ROUTES = {
     theory: {
       root: "/machine/theory",
       code: "/machine/theory/code",
+      detail: "/machine/theory/detail",
     },
     lab: {
       root: "/machine/lab",
@@ -44,11 +46,13 @@ export const DEEP_THEORY_SUB_NAV = [
   { href: ROUTES.deep.theory.root, label: "이론 홈" },
   { href: ROUTES.deep.theory.math, label: "수학" },
   { href: ROUTES.deep.theory.code, label: "코드" },
+  { href: ROUTES.deep.theory.detail, label: "상세 이론" },
 ];
 
 export const MACHINE_THEORY_SUB_NAV = [
   { href: ROUTES.machine.theory.root, label: "이론 홈" },
   { href: ROUTES.machine.theory.code, label: "코드" },
+  { href: ROUTES.machine.theory.detail, label: "상세 이론" },
 ];
 
 export const DEEP_LAB_SUB_NAV = [

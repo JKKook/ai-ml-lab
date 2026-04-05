@@ -13,6 +13,16 @@ const BRANCHES = [
     glow: "from-teal-500/15 to-transparent",
     accent: "#5eead4",
   },
+  {
+    href: ROUTES.machine.theory.detail,
+    title: "상세 이론",
+    titleEn: "Deep dive",
+    description:
+      "통계·모델링 개념, 가정, 해석을 코드 스니펫보다 서술 중심으로 정리하는 공간입니다.",
+    border: "border-sky-500/25 hover:border-sky-500/50",
+    glow: "from-sky-500/15 to-transparent",
+    accent: "#7dd3fc",
+  },
 ];
 
 export default function MachineTheoryHubPage() {
@@ -34,7 +44,9 @@ export default function MachineTheoryHubPage() {
             </p>
             <h1 className="text-3xl font-bold">이론 · 머신러닝 / 빅데이터</h1>
             <p className="text-sm leading-relaxed text-zinc-500">
-              하위 주제는 상단 서브메뉴와 아래 카드에서 이동할 수 있습니다.
+              <strong className="text-zinc-400">코드</strong>와{" "}
+              <strong className="text-zinc-400">상세 이론</strong>으로 나누었습니다. 상단
+              서브메뉴와 아래 카드에서 이동할 수 있습니다.
             </p>
           </header>
 

@@ -23,6 +23,16 @@ const THEORY_BRANCHES = [
     glow: "from-fuchsia-500/15 to-transparent",
     accent: "#e879f9",
   },
+  {
+    href: ROUTES.deep.theory.detail,
+    title: "상세 이론",
+    titleEn: "Deep dive",
+    description:
+      "수식 위주 수학 페이지와 달리, 알고리즘·학습 흐름·직관과 맥락을 글로 풀어 정리합니다.",
+    border: "border-sky-500/25 hover:border-sky-500/50",
+    glow: "from-sky-500/15 to-transparent",
+    accent: "#7dd3fc",
+  },
 ];
 
 export default function TheoryPage() {
@@ -44,9 +54,10 @@ export default function TheoryPage() {
             </p>
             <h1 className="text-3xl font-bold">이론</h1>
             <p className="text-sm leading-relaxed text-zinc-500">
-              <strong className="text-zinc-400">수학</strong>과{" "}
-              <strong className="text-zinc-400">코드</strong>로 나누어 두었습니다. 상단
-              서브메뉴에서도 언제든 이동할 수 있습니다.
+              <strong className="text-zinc-400">수학</strong>,{" "}
+              <strong className="text-zinc-400">코드</strong>,{" "}
+              <strong className="text-zinc-400">상세 이론</strong>으로 나누어 두었습니다.
+              상단 서브메뉴에서도 언제든 이동할 수 있습니다.
             </p>
           </header>
 
@@ -82,6 +93,8 @@ export default function TheoryPage() {
             <code className="text-zinc-400">{ROUTES.deep.theory.math}</code>
             {" · "}
             <code className="text-zinc-400">{ROUTES.deep.theory.code}</code>
+            {" · "}
+            <code className="text-zinc-400">{ROUTES.deep.theory.detail}</code>
           </div>
         </main>
       </div>
