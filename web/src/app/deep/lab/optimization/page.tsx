@@ -2,17 +2,26 @@
 
 import Link from "next/link";
 import { CodeToggle } from "@/components/CodeToggle";
+import { CnnTrainingChart } from "@/components/charts/CnnTrainingChart";
+import { FilterHeatmap, PixelImage } from "@/components/CnnVisuals";
 import { OptimizationLossChart } from "@/components/charts/OptimizationLossChart";
 import { OptimizationTrajectoryChart } from "@/components/charts/OptimizationTrajectoryChart";
 import {
   SNIPPET_TORCH_ADAM,
   SNIPPET_TORCH_ADAMW_NOTE,
+  SNIPPET_TORCH_CNN,
   SNIPPET_TORCH_MOMENTUM,
   SNIPPET_TORCH_RMSPROP,
   SNIPPET_TORCH_SGD,
 } from "@/config/optimization-snippets";
 import { ROUTES } from "@/config/routes";
+import { useCnnTrainingDemo } from "@/hooks/useCnnTrainingDemo";
 import { useOptimizationDemo } from "@/hooks/useOptimizationDemo";
+import {
+  CNN_CLASS_NAMES,
+  defaultCnnLearningRateFor,
+  type CnnOptimizerName,
+} from "@/lib/cnn";
 import {
   defaultLearningRateFor,
   type OptimizerName,
@@ -47,6 +56,11 @@ export default function OptimizationLabPage() {
   const progress =
     demo.totalSteps > 1 ? (demo.currentStep / (demo.totalSteps - 1)) * 100 : 0;
   const p = demo.currentPoint;
+
+  const cnn = useCnnTrainingDemo();
+  const cnnMaxAbs = Math.max(
+    ...cnn.currentSnapshot.filters.flat(2).map((w) => Math.abs(w)),
+  );
 
   return (
     <div className="min-h-full bg-zinc-950 text-zinc-100">
@@ -352,6 +366,237 @@ export default function OptimizationLabPage() {
             </div>
           </div>
         </div>
+
+        {/* ── 미니 CNN 학습 최적화 시연 ─────────────────────────────── */}
+        <section className="mt-14 border-t border-zinc-800 pt-10">
+          <h2 className="text-2xl font-bold">미니 CNN 학습 최적화 시연</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-500">
+            위의 2차원 지도 데모를 <strong className="text-zinc-300">실제 신경망 학습</strong>
+            으로 확장한 버전입니다. 8×8 합성 이미지 3클래스(세로선·가로선·대각선)를 작은
+            CNN(합성곱 3×3 필터 4개 → ReLU → 2×2 풀링 → 완전연결, 파라미터 151개)으로{" "}
+            <strong className="text-zinc-300">브라우저 안에서 직접 학습</strong>합니다. 데이터·
+            초기값·셔플까지 시드가 고정돼 있어서,{" "}
+            <strong className="text-zinc-300">옵티마이저와 학습률만 바꿨을 때</strong> 손실·
+            정확도 곡선과 학습된 합성곱 필터가 어떻게 달라지는지 공정하게 비교할 수 있습니다.
+          </p>
+
+          <div className="mt-6 mb-4 flex flex-wrap items-center gap-3 rounded-2xl border border-zinc-800 bg-zinc-900/60 px-5 py-4">
+            <button
+              type="button"
+              onClick={cnn.togglePlay}
+              className={`rounded-lg border px-5 py-2 text-sm font-semibold transition ${
+                cnn.isPlaying
+                  ? "border-red-500/50 bg-red-500/10 text-red-300 hover:bg-red-500/20"
+                  : "border-cyan-500/50 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20"
+              }`}
+            >
+              {cnn.isPlaying ? "⏸ 일시정지" : "▶ 재생"}
+            </button>
+            <button
+              type="button"
+              onClick={cnn.reset}
+              className="rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-400 transition hover:border-zinc-500 hover:text-zinc-200"
+            >
+              ↺ 처음
+            </button>
+            <button
+              type="button"
+              onClick={cnn.jumpToEnd}
+              className="rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-400 transition hover:border-zinc-500 hover:text-zinc-200"
+            >
+              ⏭ 끝으로
+            </button>
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-zinc-500" htmlFor="cnn-speed">
+                속도
+              </label>
+              <input
+                id="cnn-speed"
+                type="range"
+                min={1}
+                max={20}
+                value={cnn.speed}
+                onChange={(e) => cnn.setSpeed(Number(e.target.value))}
+                className="w-28 accent-cyan-500"
+              />
+              <span className="w-16 font-mono text-xs text-zinc-400">{cnn.speed} 스텝/틱</span>
+            </div>
+            <div className="ml-auto text-right">
+              <p className="text-[10px] uppercase tracking-wider text-zinc-500">스텝</p>
+              <p className="font-mono text-2xl font-extrabold text-cyan-400">
+                {cnn.currentStep.toLocaleString("en-US")}
+              </p>
+              <p className="text-[10px] text-zinc-600">
+                / {(cnn.totalSteps - 1).toLocaleString("en-US")}
+              </p>
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <input
+              type="range"
+              min={0}
+              max={Math.max(0, cnn.totalSteps - 1)}
+              value={cnn.currentStep}
+              onChange={(e) => cnn.setCurrentStep(Number(e.target.value))}
+              className="w-full accent-cyan-500"
+            />
+            <p className="mt-2 text-xs text-zinc-500">
+              슬라이더로 중간 스텝의 손실·정확도·필터·예측 상태를 확인할 수 있습니다.
+            </p>
+          </div>
+
+          <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
+              <label className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                옵티마이저
+              </label>
+              <select
+                value={cnn.optimizer}
+                onChange={(e) => {
+                  const o = e.target.value as CnnOptimizerName;
+                  cnn.setOptimizer(o);
+                  cnn.setLr(defaultCnnLearningRateFor(o));
+                }}
+                className="mt-2 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-2 text-sm text-zinc-200"
+              >
+                {(Object.keys(OPT_LABELS) as CnnOptimizerName[]).map((k) => (
+                  <option key={k} value={k}>
+                    {OPT_LABELS[k]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
+              <label className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                학습률 lr
+              </label>
+              <input
+                type="number"
+                step="any"
+                value={cnn.lr}
+                onChange={(e) => cnn.setLr(Number(e.target.value))}
+                className="mt-2 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-2 font-mono text-sm text-zinc-200"
+              />
+            </div>
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
+              <label className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                에폭
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={100}
+                step={1}
+                value={cnn.epochs}
+                onChange={(e) => cnn.setEpochs(Number(e.target.value))}
+                className="mt-2 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-2 font-mono text-sm text-zinc-200"
+              />
+            </div>
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
+              <label className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                배치 크기
+              </label>
+              <select
+                value={cnn.batchSize}
+                onChange={(e) => cnn.setBatchSize(Number(e.target.value))}
+                className="mt-2 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-2 font-mono text-sm text-zinc-200"
+              >
+                {[8, 16, 32].map((b) => (
+                  <option key={b} value={b}>
+                    {b}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                현재 상태
+              </p>
+              <p className="mt-2 font-mono text-sm font-bold text-cyan-400">
+                acc {(cnn.currentPoint.testAcc * 100).toFixed(1)}%
+              </p>
+              <p className="mt-1 font-mono text-[11px] text-zinc-500">
+                loss {cnn.currentPoint.loss.toFixed(4)} · epoch {cnn.currentPoint.epoch}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid min-w-0 grid-cols-1 items-start gap-5 lg:grid-cols-2">
+            <div className="flex min-w-0 flex-col gap-4 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5">
+              <div className="min-w-0 shrink-0">
+                <CnnTrainingChart data={cnn.chartData} />
+              </div>
+              <div className="min-w-0">
+                <CodeToggle
+                  variant="compact"
+                  summary="코드 보기 · PyTorch — 같은 과제·같은 미니 CNN"
+                  caption="로컬 또는 Colab에서 torch만 설치하면 실행됩니다. 주석 처리된 옵티마이저를 바꿔 가며 곡선을 비교해 보세요."
+                  code={SNIPPET_TORCH_CNN}
+                />
+              </div>
+            </div>
+
+            <div className="flex min-w-0 flex-col gap-5 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                  학습된 합성곱 필터 (step {cnn.currentSnapshot.step})
+                </p>
+                <div className="mt-3 flex flex-wrap gap-4">
+                  {cnn.currentSnapshot.filters.map((f, i) => (
+                    <div key={i} className="flex flex-col items-center gap-1.5">
+                      <FilterHeatmap weights={f} maxAbs={cnnMaxAbs} />
+                      <span className="text-[10px] text-zinc-500">filter {i + 1}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-3 text-[11px] leading-relaxed text-zinc-500">
+                  3×3 필터 가중치를 색으로 나타냈습니다(
+                  <span className="text-orange-400">주황=양수</span> ·{" "}
+                  <span className="text-sky-400">하늘=음수</span>, 진할수록 큼). 학습이
+                  진행되면 선을 감지하는 패턴 — 세로·가로·대각 방향의 대비 — 이 자라나는
+                  것을 재생하면서 볼 수 있습니다.
+                </p>
+              </div>
+
+              <div className="border-t border-zinc-800 pt-4">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
+                  현재 모델의 예측 (테스트 샘플 6장)
+                </p>
+                <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {cnn.result.demoSamples.map((s, i) => {
+                    const pred = cnn.currentSnapshot.preds[i];
+                    return (
+                      <div
+                        key={i}
+                        className="flex flex-col items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-950/50 p-2.5"
+                      >
+                        <PixelImage pixels={s.pixels} />
+                        <p className="text-[10px] text-zinc-500">
+                          정답 {CNN_CLASS_NAMES[s.label]}
+                        </p>
+                        <p
+                          className={`text-[10px] font-semibold ${
+                            pred.correct ? "text-emerald-400" : "text-red-400"
+                          }`}
+                        >
+                          예측 {CNN_CLASS_NAMES[pred.predicted]}{" "}
+                          {(pred.confidence * 100).toFixed(0)}%{" "}
+                          {pred.correct ? "✓" : "✗"}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="mt-3 text-[11px] leading-relaxed text-zinc-500">
+                  학습에 쓰지 않은 샘플입니다. 재생하면서 초반의 오답(빨강)이 어느 스텝부터
+                  정답(초록)·높은 확신으로 바뀌는지, 옵티마이저마다 그 시점이 얼마나 다른지
+                  관찰해 보세요.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
