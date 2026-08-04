@@ -33,9 +33,9 @@ export function TheoryTopicAccordion({
     >
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-4 py-3.5 text-left hover:bg-zinc-800/40 [&::-webkit-details-marker]:hidden">
         <div className="min-w-0 flex-1">
-          <div className="block text-sm font-semibold text-zinc-100">{title}</div>
+          <div className="block text-base font-semibold text-zinc-50">{title}</div>
           {subtitle ? (
-            <div className="mt-0.5 block text-xs text-zinc-500">{subtitle}</div>
+            <div className="mt-0.5 block text-sm text-zinc-400">{subtitle}</div>
           ) : null}
         </div>
         <span
@@ -44,7 +44,7 @@ export function TheoryTopicAccordion({
           ▼
         </span>
       </summary>
-      <div className="border-t border-zinc-800/80 px-4 py-4 text-sm leading-relaxed text-zinc-400">
+      <div className="border-t border-zinc-800/80 px-4 py-4 text-[15px] leading-relaxed text-zinc-300">
         {children}
       </div>
     </details>
