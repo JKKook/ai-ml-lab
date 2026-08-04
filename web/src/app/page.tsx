@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ROUTES } from '@/config/routes';
+import { TheoryQaCard } from '@/components/TheoryQaCard';
 
 const TOP_SECTIONS = [
     {
@@ -89,6 +90,8 @@ export default function Home() {
                         </Link>
                     ))}
                 </div>
+
+                <TheoryQaCard />
 
                 <footer className='space-y-1 text-xs text-zinc-600'>
                     <p>
