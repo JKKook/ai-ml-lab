@@ -1,21 +1,11 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import Link from "next/link";
 import { LinearRegressionLab } from "@/components/LinearRegressionLab";
 import { ROUTES } from "@/config/routes";
-import { closedFormFit, describeDataset, parseCsv } from "@/lib/linear-regression";
+import { SALARY_DATA } from "@/config/salary-data";
+import { closedFormFit, describeDataset } from "@/lib/linear-regression";
 
-/** 데이터는 빌드 시점에 CSV 파일에서 한 번만 읽는다. */
-async function loadPoints() {
-  const csv = await readFile(
-    path.join(process.cwd(), "data", "Salary_Data.csv"),
-    "utf8"
-  );
-  return parseCsv(csv);
-}
-
-export default async function LinearRegressionPage() {
-  const points = await loadPoints();
+export default function LinearRegressionPage() {
+  const points = SALARY_DATA;
   const stats = describeDataset(points);
   const fit = closedFormFit(points);
 
@@ -40,7 +30,7 @@ export default async function LinearRegressionPage() {
           <p className="font-mono text-sm text-zinc-400">
             ŷ = w · x + b{" "}
             <span className="text-zinc-600">
-              · data/Salary_Data.csv · 경력 {stats.x.mean.toFixed(2)}년 평균 · 연봉{" "}
+              · 합성 데이터 {stats.n}건 · 경력 {stats.x.mean.toFixed(2)}년 평균 · 연봉{" "}
               {Math.round(stats.y.mean).toLocaleString("en-US")} 평균
             </span>
           </p>

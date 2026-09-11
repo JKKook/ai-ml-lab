@@ -185,7 +185,7 @@ export function LinearRegressionLab({ points }: { points: SamplePoint[] }) {
             <CodeToggle
               variant="compact"
               summary="코드 보기 · CSV 읽기 (pandas)"
-              caption="이 페이지도 같은 파일(data/Salary_Data.csv)을 서버에서 읽어 넘겨 줍니다."
+              caption="같은 형식의 CSV를 파이썬에서 읽는 방법입니다. 이 페이지는 같은 값을 코드 상수로 들고 있습니다."
               code={SNIPPET_PANDAS_LOAD}
             />
             <CodeToggle

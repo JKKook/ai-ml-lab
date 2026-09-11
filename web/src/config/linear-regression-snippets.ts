@@ -1,8 +1,8 @@
-/** 브라우저 데모와 같은 데이터(Salary_Data.csv)·같은 절차를 파이썬으로 옮긴 예제 */
+/** 브라우저 데모와 같은 데이터·같은 절차를 파이썬으로 옮긴 예제 */
 
 export const SNIPPET_PANDAS_LOAD = `import pandas as pd
 
-df = pd.read_csv("Salary_Data.csv")   # YearsExperience, Salary — 30행
+df = pd.read_csv("salary.csv")   # YearsExperience, Salary 두 열 — 아래 예측 표와 같은 30행
 x = df["YearsExperience"].to_numpy()
 y = df["Salary"].to_numpy()
 

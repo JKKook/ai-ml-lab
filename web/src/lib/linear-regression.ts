@@ -1,5 +1,5 @@
 /**
- * 단순 선형 회귀 — data/Salary_Data.csv (경력 vs 연봉, 실습용 합성 데이터) 기준
+ * 단순 선형 회귀 — 경력 vs 연봉 합성 데이터(config/salary-data.ts) 기준
  *   ŷ = slope · x + intercept
  * 원 스케일(x≈1~10, y≈4만~12만)에서는 경사하강이 쉽게 발산하므로
  * z-score로 표준화한 공간에서 학습하고, 계수만 원 단위로 되돌린다.
@@ -59,21 +59,6 @@ export type TrainingConfig = {
   learningRate: number;
   steps: number;
 };
-
-/** 헤더 1줄 + `x,y` 숫자 2열 CSV를 읽는다 (빈 줄·공백 허용). */
-export function parseCsv(text: string): SamplePoint[] {
-  return text
-    .trim()
-    .split(/\r?\n/)
-    .slice(1)
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [x, y] = line.split(",").map(Number);
-      return { x, y };
-    })
-    .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y));
-}
 
 function standardize(values: number[]): Standardization {
   const n = values.length;
