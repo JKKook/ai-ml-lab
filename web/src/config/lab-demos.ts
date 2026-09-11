@@ -3,6 +3,20 @@ import { ROUTES } from "./routes";
 /** 실습(/deep/lab) 카드·홈 안내에서 공통 사용 */
 export const LAB_DEMO_CARDS = [
     {
+        href: ROUTES.deep.lab.linearRegression,
+        title: 'Linear Regression',
+        titleKo: '선형 회귀',
+        description:
+            'Fit a straight line to a CSV file (30 synthetic salary records) with batch gradient descent. Scrub through steps, watch the line snap onto the least-squares solution, and compare RMSE / R\u00b2 against the closed-form answer.',
+        descriptionKo:
+            'CSV 파일에 담긴 경력 vs 연봉 30건(실습용 합성 데이터)에 직선 하나를 맞춥니다. 스텝을 되감으며 회귀선이 최소 제곱 정답선에 겹쳐지는 과정을 보고, 학습률을 바꿔 수렴과 발산을 비교합니다.',
+        badge: 'pandas · gradient descent',
+        badgeColor: 'bg-violet-900/40 text-violet-300 border-violet-800/60',
+        glow: 'from-violet-500/15 to-transparent',
+        border: 'border-violet-500/25 hover:border-violet-500/50',
+        accent: '#a78bfa',
+    },
+    {
         href: ROUTES.deep.lab.activationFunction,
         title: 'Activation Functions',
         titleKo: '활성화 함수',
