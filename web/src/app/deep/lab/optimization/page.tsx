@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { CodeToggle } from "@/components/CodeToggle";
+import { ExperimentAnalysis } from "@/components/ExperimentAnalysis";
+import { LAB_ANALYSIS } from "@/config/lab-analysis";
 import { CnnTrainingChart } from "@/components/charts/CnnTrainingChart";
 import { FilterHeatmap, PixelImage } from "@/components/CnnVisuals";
 import { OptimizationLossChart } from "@/components/charts/OptimizationLossChart";
@@ -367,6 +369,12 @@ export default function OptimizationLabPage() {
           </div>
         </div>
 
+        <ExperimentAnalysis
+          analysis={LAB_ANALYSIS.optimization}
+          title="실험 분석 · Rosenbrock 옵티마이저 비교"
+          accent="#f97316"
+        />
+
         {/* ── 미니 CNN 학습 최적화 시연 ─────────────────────────────── */}
         <section className="mt-14 border-t border-zinc-800 pt-10">
           <h2 className="text-2xl font-bold">미니 CNN 학습 최적화 시연</h2>
@@ -596,6 +604,11 @@ export default function OptimizationLabPage() {
               </div>
             </div>
           </div>
+          <ExperimentAnalysis
+            analysis={LAB_ANALYSIS.cnnTraining}
+            title="실험 분석 · 미니 CNN 학습"
+            accent="#38bdf8"
+          />
         </section>
       </div>
     </div>

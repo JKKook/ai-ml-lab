@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { LossChart } from "@/components/charts/LossChart";
 import { CodeToggle } from "@/components/CodeToggle";
+import { ExperimentAnalysis } from "@/components/ExperimentAnalysis";
+import { LAB_ANALYSIS } from "@/config/lab-analysis";
 import {
   SNIPPET_NUMPY_LOSS_APPEND,
   SNIPPET_NUMPY_SIGMOID_AND_DERIV,
@@ -308,6 +310,11 @@ export default function BackpropPage() {
             />
           </div>
         </div>
+
+        <ExperimentAnalysis
+          analysis={LAB_ANALYSIS.backPropagation}
+          accent="#10b981"
+        />
 
         <p className="mt-10 text-xs text-zinc-600">
           다른 실습:{" "}

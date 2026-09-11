@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { ActivationCurveChart } from "@/components/charts/ActivationCurveChart";
 import { CodeToggle } from "@/components/CodeToggle";
+import { ExperimentAnalysis } from "@/components/ExperimentAnalysis";
+import { LAB_ANALYSIS } from "@/config/lab-analysis";
 import {
   SNIPPET_NB_HISTOGRAM_Z,
   SNIPPET_NB_INPUTS_AND_LAYER,
@@ -374,6 +376,11 @@ export default function ActivationPage() {
             </table>
           </div>
         </div>
+
+        <ExperimentAnalysis
+          analysis={LAB_ANALYSIS.activationFunction}
+          accent="#f59e0b"
+        />
 
         <p className="mt-10 text-xs text-zinc-600">
           다른 실습:{" "}
