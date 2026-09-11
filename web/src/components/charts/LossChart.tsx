@@ -15,7 +15,7 @@ type Props = { data: EpochResult[] };
 
 export function LossChart({ data }: Props) {
   return (
-    <div className="flex flex-col gap-1.5 h-full">
+    <div className="flex flex-col gap-1.5">
       <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500">
         Training loss (MSE)
       </p>
